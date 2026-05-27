@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Google Sheet JSONP Map Template</title>
+    <title> 2019 Michelin Restaurants Map</title>
     <!-- Load MapLibre GL JS, the JavaScript library that draws the interactive map. -->
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <!-- Load MapLibre's CSS so the map controls and popups display correctly. -->
@@ -23,8 +23,8 @@
 var map = new maplibregl.Map({
     container: 'map',
     style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    center: [-122.411, 37.785],
-    zoom: 8
+    center: [0,20],
+    zoom: 2
 });
 
 // STEP 2: CALL THE GOOGLE SHEET
@@ -90,6 +90,7 @@ map.addLayer({
 // STEP 4: CREATE MINIMAL POPUPS
     // When a point is clicked, show values from the location and description columns.
     map.on('click', 'points', function (e) {
+        var html = '<div style ="max-width: 250px;>';
         var props = e.features[0].properties;
         var html = `<h3>${props.name}</h3><p>${props.cuisine}</p>`;
 
