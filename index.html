@@ -91,13 +91,16 @@ map.addLayer({
     // When a point is clicked, show values from the location and description columns.
     map.on('click', 'points', function (e) {
         var props = e.features[0].properties;
-        var html = `<h3>${props.name}</h3><p>${props.cuisine}</p>`;
+        var html = `<div style="max-width: 250px;">';
+        html += '<h3>' +props.name + '</h3>';
+        html += '<p>' + props.cuisine + '</p>';
+        html += '</div>';
 
         new maplibregl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(html)
             .addTo(map);
-    })
+    });
 // Make the cursor change over points so users know the points can be clicked.
     map.on('mouseenter', 'points', function () {
         map.getCanvas().style.cursor = 'pointer';
