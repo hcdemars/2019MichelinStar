@@ -17,37 +17,38 @@
 </head>
 <body> 
     <div id="map"></div>
-    // STEP 1: MAKE THE MAP
-// MapLibre creates the interactive web map inside the <div id="map"></div>.
     <script>
-var map = new maplibregl.Map({
-    container: 'map',
-    style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    center: [0,20],
-    zoom: 1.5
-});
-
-// STEP 2: CALL THE GOOGLE SHEET
-// Wait for the basemap to load before adding spreadsheet data.
-map.on('load', function () {
-    // This URL uses Google Sheets gviz JSONP, not the CSV download.
-    // JSONP loads data with a script tag, which avoids the CORS issue that blocks many CSV downloads.
-    // Paste your spreadsheet ID after /d/ and paste your sheet tab name after sheet=.
-    var sheetScript = document.createElement('script');
-    sheetScript.src = 'https://docs.google.com/spreadsheets/d/1s-vHfOOsZwfvDHz0WqYmMmdDTPvL2y8EBlOB8Yak6Qs/gviz/tq?tqx=out:json;responseHandler:handleGoogleSheetData&sheet=Michelin2019';
-    document.head.appendChild(sheetScript);
-});
-// Google calls this function after the sheet data loads.
-function handleGoogleSheetData(response) {
-    // Store the column names from the first row of the Google Sheet.
-    var columns = response.table.cols.map(function (column) {
-        return column.label;
+    // STEP 1: MAKE THE MAP
+    // MapLibre creates the interactive web map inside the <div id="map"></div>.
+  
+    var map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+        center: [0,20],
+        zoom: 1.5
     });
 
-    // STEP 3: CREATE THE POINTS
-    // Turn each spreadsheet row into one GeoJSON point.
-    var features = response.table.rows.map(function (row) {
-        var props = {};
+    // STEP 2: CALL THE GOOGLE SHEET
+    // Wait for the basemap to load before adding spreadsheet data.
+    map.on('load', function () {
+        // This URL uses Google Sheets gviz JSONP, not the CSV download.
+        // JSONP loads data with a script tag, which avoids the CORS issue that blocks many CSV downloads.
+        // Paste your spreadsheet ID after /d/ and paste your sheet tab name after sheet=.
+        var sheetScript = document.createElement('script');
+        sheetScript.src = 'https://docs.google.com/spreadsheets/d/1s-vHfOOsZwfvDHz0WqYmMmdDTPvL2y8EBlOB8Yak6Qs/gviz/tq?tqx=out:json;responseHandler:handleGoogleSheetData&sheet=Michelin2019';
+        document.head.appendChild(sheetScript);
+    });
+    // Google calls this function after the sheet data loads.
+    function handleGoogleSheetData(response) {
+        // Store the column names from the first row of the Google Sheet.
+        var columns = response.table.cols.map(function (column) {
+            return column.label;
+        });
+
+        // STEP 3: CREATE THE POINTS
+        // Turn each spreadsheet row into one GeoJSON point.
+        var features = response.table.rows.map(function (row) {
+            var props = {};
 
         // Copy each cell into props using its spreadsheet column name.
         columns.forEach(function (columnName, index) {
@@ -66,27 +67,27 @@ function handleGoogleSheetData(response) {
         };
     });
 
-// GeoJSON is the standard web map format MapLibre uses for vector features.
-var geojson = {
-    type: 'FeatureCollection',
-    features: features
-};
-// Add the GeoJSON as a map source. Sources hold data.
-map.addSource('sheet-points', {
-    type: 'geojson',
-    data: geojson
-});
+    // GeoJSON is the standard web map format MapLibre uses for vector features.
+    var geojson = {
+        type: 'FeatureCollection',
+        features: features
+    };
+    // Add the GeoJSON as a map source. Sources hold data.
+    map.addSource('sheet-points', {
+        type: 'geojson',
+        data: geojson
+    });
 
-// Add a circle layer to draw the source data. Layers control appearance.
-map.addLayer({
-    id: 'points',
-    type: 'circle',
-    source: 'sheet-points',
-    paint: {
-        'circle-radius': 6,
-        'circle-color': 'red'
-    }
-});
+    // Add a circle layer to draw the source data. Layers control appearance.
+    map.addLayer({
+        id: 'points',
+        type: 'circle',
+        source: 'sheet-points',
+        paint: {
+            'circle-radius': 6,
+            'circle-color': 'red'
+        }
+    });
     // STEP 4: CREATE MINIMAL POPUPS
     map.on('click', 'points', function (e) {
         var props = e.features[0].properties;
@@ -109,6 +110,6 @@ map.addLayer({
         map.getCanvas().style.cursor = '';
     });
     }
-        </script>
+</script>
 </body>
 </html>
