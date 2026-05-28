@@ -90,7 +90,6 @@ map.addLayer({
 // STEP 4: CREATE MINIMAL POPUPS
     // When a point is clicked, show values from the location and description columns.
     map.on('click', 'points', function (e) {
-        var html = '<div style ="max-width: 250px;>';
         var props = e.features[0].properties;
         var html = `<h3>${props.name}</h3><p>${props.cuisine}</p>`;
 
