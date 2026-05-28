@@ -87,28 +87,28 @@ map.addLayer({
         'circle-color': 'red'
     }
 });
-// STEP 4: CREATE MINIMAL POPUPS
-map.on('click', 'points', function (e) {
-    var props = e.features[0].properties;
-    var html = '<div style="max-width: 250px;">';
-    html += '<h3>' + props.name + '</h3>';
-    html += '<p>' + props.cuisine + '</p>';
-    html += '</div>';
-
-    new maplibregl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(html)
-        .addTo(map);
-});
-
-// Make the cursor change over points so users know the points can be clicked.
-map.on('mouseenter', 'points', function () {
-    map.getCanvas().style.cursor = 'pointer';
-});
-map.on('mouseleave', 'points', function () {
-    map.getCanvas().style.cursor = '';
-});
-}
+    // STEP 4: CREATE MINIMAL POPUPS
+    map.on('click', 'points', function (e) {
+        var props = e.features[0].properties;
+        var html = '<div style="max-width: 250px;">';
+        html += '<h3>' + props.name + '</h3>';
+        html += '<p>' + props.cuisine + '</p>';
+        html += '</div>';
+    
+        new maplibregl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(html)
+            .addTo(map);
+    });
+    
+    // Make the cursor change over points so users know the points can be clicked.
+    map.on('mouseenter', 'points', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'points', function () {
+        map.getCanvas().style.cursor = '';
+    });
+    }
         </script>
 </body>
 </html>
